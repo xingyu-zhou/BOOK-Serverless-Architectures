@@ -1,5 +1,5 @@
-task wrapper(type: Wrapper) {
-    gradleVersion = '3.5'
+wrapper {
+    gradleVersion = '7.1.1'
 }
 
 // allprojects means this configuration
@@ -18,7 +18,7 @@ allprojects {
 allprojects {
     repositories {
         mavenCentral()
-        jcenter()
+//        jcenter()
         maven {
             url "https://jitpack.io"
         }
@@ -28,14 +28,17 @@ allprojects {
 buildscript {
     repositories {
         mavenCentral()
-        jcenter()
+ //       jcenter()
         maven {
             url "https://jitpack.io"
+        }
+        maven {
+            url "https://plugins.gradle.org/m2/"
         }
     }
 
     dependencies {
-        classpath "com.github.jengelman.gradle.plugins:shadow:1.2.3"
+        classpath "gradle.plugin.com.github.johnrengelman:shadow:7.1.2"
         classpath "jp.classmethod.aws:gradle-aws-plugin:0.31"
     }
 }
@@ -43,7 +46,7 @@ buildscript {
 allprojects {
     apply plugin: "jp.classmethod.aws"
     aws {
-        region = "us-east-1"
+        region = "us-west-2"
     }
 }
 
@@ -52,9 +55,9 @@ allprojects {
 
         compileOnly group: 'javax.inject', name: 'javax.inject', version: '1'
 
-        testCompile group: 'junit', name: 'junit', version: '4.11'
-        testCompile group: 'org.easymock', 'name': 'easymock', 'version': '3.4'
-        testCompile group: 'org.powermock', name: 'powermock-easymock-release-full', version: '1.6.+'
+        testImplementation group: 'junit', name: 'junit', version: '4.11'
+        testImplementation group: 'org.easymock', 'name': 'easymock', 'version': '3.4'
+        testImplementation group: 'org.powermock', name: 'powermock-easymock-release-full', version: '1.6.+'
     }
 }
 
@@ -71,7 +74,7 @@ allprojects {
 
 configure(subprojects.findAll { it.name.startsWith("lambda-") }) {
     dependencies {
-        compile project(':lambda')
+        implementation project(':lambda')
     }
     apply plugin: "com.github.johnrengelman.shadow"
     build.finalizedBy shadowJar
@@ -94,13 +97,13 @@ cloudFormation {
     templateFile project.file('cloudformation.template')
     templateBucket deploymentBucketName
     templateKeyPrefix "cfn-templates"
-    stackName "serverlessbook"
+    stackName "serverlesstest"
     conventionMapping.stackParams = {
         return [
                 DeploymentBucket: deploymentBucketName,
                 ProjectVersion  : project.version,
-                DeploymentTime  : deploymentTime,
-                DomainName      : "serverlessbook.merkurapp.com",
+                DeploymentTime  : deploymentTime
+                DomainName      : "test.zhoxy.link",
                 CloudSearchDomain: "serverlessbook-uiyqpdvcdz7o4hxudtnqzpjdtu"
         ]
     }
