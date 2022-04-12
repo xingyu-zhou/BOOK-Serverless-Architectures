@@ -102,7 +102,7 @@ cloudFormation {
         return [
                 DeploymentBucket: deploymentBucketName,
                 ProjectVersion  : project.version,
-                DeploymentTime  : deploymentTime
+                DeploymentTime  : deploymentTime,
                 DomainName      : "test.zhoxy.link",
                 CloudSearchDomain: "serverlessbook-uiyqpdvcdz7o4hxudtnqzpjdtu"
         ]
