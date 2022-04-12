@@ -1,5 +1,5 @@
-task wrapper(type: Wrapper) {
-    gradleVersion = '3.0'
+wrapper {
+    gradleVersion = '7.1.1'
 }
 
 // allprojects means this configuration
@@ -18,9 +18,11 @@ allprojects {
 allprojects {
     repositories {
         mavenCentral()
-        jcenter()
         maven {
             url "https://jitpack.io"
+        }
+        maven {
+            url "https://plugins.gradle.org/m2/"
         }
     }
 }
@@ -28,14 +30,16 @@ allprojects {
 buildscript {
     repositories {
         mavenCentral()
-        jcenter()
         maven {
             url "https://jitpack.io"
+        }
+        maven {
+            url "https://plugins.gradle.org/m2/"
         }
     }
 
     dependencies {
-        classpath "com.github.jengelman.gradle.plugins:shadow:1.2.3"
+        classpath "gradle.plugin.com.github.johnrengelman:shadow:7.1.2"
         classpath "jp.classmethod.aws:gradle-aws-plugin:0.31"
     }
 }
@@ -49,7 +53,7 @@ allprojects {
 
 allprojects {
     dependencies {
-        testCompile group: 'junit', name: 'junit', version: '4.11'
+        testImplementation group: 'junit', name: 'junit', version: '4.11'
     }
 }
 
@@ -66,7 +70,7 @@ allprojects {
 
 configure(subprojects.findAll { it.name.startsWith("lambda-") }) {
     dependencies {
-        compile project(':lambda')
+        implementation project(':lambda')
     }
     apply plugin: "com.github.johnrengelman.shadow"
     build.finalizedBy shadowJar
